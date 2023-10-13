@@ -22,12 +22,12 @@ public class ReservationCalendar extends JDialog{
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 	// ----------------------------------------------------------------------------------------------
 	private JCalendar cal = new JCalendar();
-	private JButton confirmBtn = new JButton("¿Ï·á");
-	private JPanel combinePanel = new JPanel(new FlowLayout()); // cal°ú confirmBtnÀ» ÇÕÃÄÁÖ´Â Panel
+	private JButton confirmBtn = new JButton("ì™„ë£Œ");
+	private JPanel combinePanel = new JPanel(new FlowLayout()); // calê³¼ confirmBtnì„ í•©ì³ì£¼ëŠ” Panel
 	
 
 	private void compInit() {
-		cal.setDate(new Date(GetServerTime.serverTime)); // ¼­¹öÀÇ ÇöÀç ³¯Â¥°¡ Ç¥½ÃµÇ°Ô ÇÏ±â À§ÇØ ³¯Â¥¸¦ ´Ù½Ã ¼³Á¤
+		cal.setDate(new Date(GetServerTime.serverTime)); // ì„œë²„ì˜ í˜„ì¬ ë‚ ì§œê°€ í‘œì‹œë˜ê²Œ í•˜ê¸° ìœ„í•´ ë‚ ì§œë¥¼ ë‹¤ì‹œ ì„¤ì •
 		serverDate.setTime(new Date(GetServerTime.serverTime));
 		
 		confirmBtn.setPreferredSize(new Dimension(70, 40));
@@ -41,29 +41,29 @@ public class ReservationCalendar extends JDialog{
 		confirmBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Date convertedServerDate = setToTimeZero(serverDate); // ³¯Â¥°ª¸¸ ºñ±³ÇÏ±â À§ÇØ ½Ã°£°ªÀ» 0À¸·Î ¼³Á¤
+				Date convertedServerDate = setToTimeZero(serverDate); // ë‚ ì§œê°’ë§Œ ë¹„êµí•˜ê¸° ìœ„í•´ ì‹œê°„ê°’ì„ 0ìœ¼ë¡œ ì„¤ì •
 				
 				Calendar selectedDate = cal.getCalendar();
 				Date convertedSelectedDate = setToTimeZero(cal.getCalendar());
 
-				if(convertedSelectedDate.compareTo(convertedServerDate) < 0) { // °ú°Å
-					JOptionPane.showMessageDialog(ReservationCalendar.this, "Àß¸øµÈ ¼±ÅÃÀÔ´Ï´Ù.", "", JOptionPane.ERROR_MESSAGE);
-				}else if(convertedSelectedDate.compareTo(convertedServerDate) > 0) { // ¹Ì·¡
+				if(convertedSelectedDate.compareTo(convertedServerDate) < 0) { // ê³¼ê±°
+					JOptionPane.showMessageDialog(ReservationCalendar.this, "ì˜ëª»ëœ ì„ íƒì…ë‹ˆë‹¤.\n(ê³¼ê±° ë‚ ì§œ)", "", JOptionPane.ERROR_MESSAGE);
+				}else if(convertedSelectedDate.compareTo(convertedServerDate) > 0) { // ë¯¸ë˜
 					Calendar temp = Calendar.getInstance();
 					temp.setTime(convertedServerDate);
 					temp.add(Calendar.DATE, 3);
 					Date reservationPossiblePeriod = new Date(temp.getTimeInMillis());
-					if(convertedSelectedDate.compareTo(reservationPossiblePeriod) <= 0) { // ¼­¹öÀÇ ÇöÀç ³¯Â¥·ÎºÎÅÍ 3ÀÏ ÀÌÈÄ±îÁö¸¸ ¿¹¾à °¡´É
+					if(convertedSelectedDate.compareTo(reservationPossiblePeriod) <= 0) { // ì„œë²„ì˜ í˜„ì¬ ë‚ ì§œë¡œë¶€í„° 3ì¼ ì´í›„ê¹Œì§€ë§Œ ì˜ˆì•½ ê°€ëŠ¥
 						reservation.setText(sdf.format(new Date(selectedDate.getTimeInMillis())));
 						dispose();
 					}else {
-						int month = temp.get(Calendar.MONTH) + 1; // 0 : 1¿ù
+						int month = temp.get(Calendar.MONTH) + 1; // 0 : 1ì›”
 						int days = temp.get(Calendar.DATE);
 						JOptionPane.showMessageDialog(ReservationCalendar.this,
-																	   "¡¡¡¡Àå±â°£ ¿¹¾àÀº ºÒ°¡´ÉÇÕ´Ï´Ù.\n(ÃÖ´ë " + month + "¿ù " + days + "ÀÏ±îÁö ¿¹¾àÀÌ °¡´ÉÇÕ´Ï´Ù.)",
+																	   "ã€€ã€€ì¥ê¸°ê°„ ì˜ˆì•½ì€ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤.\n(ìµœëŒ€ " + month + "ì›” " + days + "ì¼ê¹Œì§€ ì˜ˆì•½ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.)",
 																	   "", JOptionPane.ERROR_MESSAGE);
 					}
-				}else if(convertedSelectedDate.compareTo(convertedServerDate) == 0){ // ÇöÀç
+				}else if(convertedSelectedDate.compareTo(convertedServerDate) == 0){ // í˜„ì¬
 					reservation.setText(sdf.format(new Date(selectedDate.getTimeInMillis())));
 					dispose();
 				}
@@ -72,8 +72,8 @@ public class ReservationCalendar extends JDialog{
 	}
 	
 	/*
- 		½Ã°£°ªÀ» 0À¸·Î ¼³Á¤ÇØÁÖ´Â ¸Ş¼­µå
- 		ex) 2018³â 1¿ù 20ÀÏ 11½Ã 30ºĞ 30ÃÊ  ¡æ  2018³â 1¿ù 20ÀÏ 00½Ã 00ºĞ 00ÃÊ
+ 		ì‹œê°„ê°’ì„ 0ìœ¼ë¡œ ì„¤ì •í•´ì£¼ëŠ” ë©”ì„œë“œ
+ 		ex) 2018ë…„ 1ì›” 20ì¼ 11ì‹œ 30ë¶„ 30ì´ˆ  â†’  2018ë…„ 1ì›” 20ì¼ 00ì‹œ 00ë¶„ 00ì´ˆ
 	*/
 	private Date setToTimeZero(Calendar cal) {
 		Date date = null;
